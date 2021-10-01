@@ -2,7 +2,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -39,13 +42,43 @@ public class Main {
 
         ArrayList<String> list = null;
         Parser parser = new Parser();
-        File file = new File("");
+        File file = new File("voyna.txt");
         try {
             list = parser.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        list.forEach(System.out::println);
+        // поиск слова введеного с клавиатуры
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите слово для поиска");
+        String scannerLine = scanner.nextLine();
+
+        System.out.println("Слов в книге " + getWorldCount(scannerLine, list));
+
+        // поиск слова Страдание
+        System.out.println("Слов в страдание книге " + getWorldCount("страдани[иеяй].?", list));
+
+        // таблица умножения
+        for (int i = 1; i <= 10; i++) {
+            for (int j = 1; j <= 10; j++) {
+                System.out.print(i * j + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // поиск слова страдание
+    public static int getWorldCount(String worldPattern, ArrayList<String> list) {
+        int indexStr = 0;
+        Pattern pattern = Pattern.compile(worldPattern, Pattern.CASE_INSENSITIVE);
+
+        for (String s : list) {
+            Matcher matcher = pattern.matcher(s);
+            while (matcher.find()) {
+                indexStr++;
+            }
+        }
+        return indexStr;
     }
 }
